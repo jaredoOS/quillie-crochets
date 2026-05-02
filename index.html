@@ -92,8 +92,11 @@
   }
   .btn-secondary:hover { border-color: var(--lavender); background: var(--lavender-light); }
 
+  /* PAGE WRAPPER */
+  .page-wrap { max-width: 1280px; margin: 0 auto; width: 100%; }
+
   /* HERO */
-  .hero { min-height: 88vh; display: flex; align-items: center; padding: 60px 64px; position: relative; overflow: hidden; }
+  .hero { min-height: 60vh; display: flex; align-items: center; justify-content: space-between; gap: 48px; padding: 60px 64px; position: relative; }
   .hero-content { max-width: 580px; z-index: 1; }
   .hero-tag {
     display: inline-flex; align-items: center; gap: 6px;
@@ -102,15 +105,15 @@
   }
   .hero-title {
     font-family: 'Pacifico', cursive; font-size: clamp(40px, 5.5vw, 68px); line-height: 1.3;
-    padding-bottom: 10px; margin-bottom: 22px; overflow: visible;
+    padding-bottom: 24px; margin-bottom: 14px; overflow: visible;
     background: linear-gradient(135deg, var(--pink), var(--lavender) 50%, var(--mint));
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
   .hero-sub { font-size: 18px; font-weight: 500; color: var(--text-mid); line-height: 1.7; margin-bottom: 36px; max-width: 460px; }
   .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
   .hero-deco {
-    position: absolute; right: 80px; top: 50%; transform: translateY(-50%);
     display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    flex-shrink: 0; margin-left: auto;
   }
   .deco-card {
     width: 156px; height: 156px; border-radius: 24px;
@@ -363,6 +366,61 @@
   .tweak-swatch { width: 26px; height: 26px; border-radius: 99px; cursor: pointer; border: 2.5px solid transparent; transition: all 0.2s; }
   .tweak-swatch.on { border-color: var(--text); transform: scale(1.18); }
 
+  /* PATTERNS BANNER */
+  .patterns-banner {
+    margin: 0 64px 80px;
+    padding: 48px 56px;
+  }
+  .patterns-banner-btn { flex-shrink: 0; }
+  @media (max-width: 900px) {
+    .patterns-banner {
+      margin: 0 24px 60px;
+      padding: 32px 28px;
+    }
+    .patterns-banner-btn { width: 100%; }
+  }
+
+  /* HAMBURGER */
+  .nav-hamburger {
+    display: none;
+    flex-direction: column; justify-content: center; align-items: center;
+    width: 40px; height: 40px; border-radius: 12px; background: var(--pink-light);
+    gap: 5px; cursor: pointer; border: none; padding: 0;
+  }
+  .nav-hamburger span {
+    display: block; width: 20px; height: 2.5px; border-radius: 99px;
+    background: var(--pink); transition: all 0.25s;
+  }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+  .mobile-menu {
+    display: none;
+    position: fixed; top: 68px; left: 0; right: 0; z-index: 99;
+    background: oklch(99% 0.01 15 / 0.97);
+    backdrop-filter: blur(20px) saturate(160%);
+    border-bottom: 1.5px solid var(--border);
+    flex-direction: column; padding: 12px 16px 20px;
+    animation: fadeIn 0.2s ease;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu .nav-link {
+    display: block; width: 100%; text-align: left;
+    padding: 14px 16px; border-radius: 14px; font-size: 16px;
+  }
+  .mobile-menu-cta {
+    margin-top: 8px; width: 100%;
+    padding: 14px 22px; border-radius: 99px;
+    background: var(--pink); color: white; font-size: 15px; font-weight: 800;
+    transition: all 0.2s; box-shadow: 0 4px 14px oklch(78% 0.15 355 / 0.3);
+    font-family: 'Nunito', sans-serif; cursor: pointer; border: none;
+  }
+
+  /* MODAL mobile fix */
+  .modal { word-break: break-word; overflow-wrap: break-word; }
+  .modal-body p, .modal-body h3 { overflow-wrap: break-word; word-break: break-word; }
+
   @media (max-width: 900px) {
     .hero { padding: 40px 24px; }
     .hero-deco { display: none; }
@@ -374,8 +432,13 @@
     .footer-top { grid-template-columns: 1fr; gap: 28px; }
     .footer { padding: 40px 24px 24px; }
     .nav { padding: 0 16px; }
-    .nav-links .nav-link { display: none; }
+    .nav-links { display: none; }
+    .nav-cta { display: none; }
+    .nav-hamburger { display: flex; }
     .gallery-card { width: calc(80% - 10px); }
+    .modal { padding: 28px 20px; max-width: calc(100vw - 48px); }
+    .modal-overlay { padding: 16px; }
+    .form-row { grid-template-columns: 1fr; }
   }
 </style>
 <script id="img-data">
@@ -410,9 +473,7 @@ const PRODUCTS = [
 { id: 7, name: "Brown Cat", img: IMG.IMG_3039, type: "physical", price: 22, desc: "Round brown & cream cat — looks grumpy but is very loveable.", color: "#f0e8d8" },
 { id: 8, name: "Watermelon Cats", img: IMG.IMG_3487, type: "physical", price: 38, desc: "A pair of watermelon cats — red with green accents, big eyes.", color: "#ffe8e8" },
 { id: 9, name: "Axolotl Charm", img: IMG.axolotl, type: "physical", price: 12, desc: "Tiny pink axolotl keychain charm — pocket-sized cuteness.", color: "#fde8ea" },
-{ id: 10, name: "Bunny Pattern", emoji: "🐰", type: "pattern", price: 7, desc: "PDF pattern · Make your own chunky bunny · Beginner-friendly · 14 pages", color: "#e8e0f8" },
-{ id: 11, name: "Mushroom Pattern", emoji: "🍄", type: "pattern", price: 8, desc: "PDF pattern · Intermediate · 18 pages · Full stitch guide included", color: "#fef0e0" },
-{ id: 12, name: "Whale Pattern", emoji: "🐳", type: "pattern", price: 6, desc: "PDF pattern · Beginner · 10 pages · Great first project!", color: "#e0eef8" }];
+];
 
 
 const GALLERY = [
@@ -436,7 +497,13 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
 function InquireModal({ product, onClose }) {
   const [sent, setSent] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', message: product ? `Hi! I'm interested in the ${product.name}. ` : '' });
-  const handle = (e) => {e.preventDefault();setSent(true);};
+  const handle = (e) => {
+    e.preventDefault();
+    const subject = encodeURIComponent(product ? `Inquiry about ${product.name}` : 'Custom order inquiry');
+    const body = encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`);
+    window.location.href = `mailto:contact@quilliecrochets.com.au?subject=${subject}&body=${body}`;
+    setSent(true);
+  };
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="inquire-modal" onClick={(e) => e.stopPropagation()}>
@@ -537,6 +604,7 @@ function GalleryGrid() {
 function HomePage({ setPage, setInquire, tweaks }) {
   return (
     <div className="page-fade">
+      <div className="page-wrap">
       <div className="hero">
         <div className="hero-content">
           <h1 className="hero-title" style={{ fontSize: "54px" }}>Crochet by Quillie
@@ -573,16 +641,15 @@ function HomePage({ setPage, setInquire, tweaks }) {
         </div>
       </div>
 
-      {/* PORTFOLIO GALLERY */}
       {/* PATTERNS BANNER */}
-      <div style={{ margin: '0 64px 0', padding: '48px 56px', borderRadius: 24, background: 'linear-gradient(135deg, oklch(78% 0.12 290), oklch(78% 0.15 355))', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 24 }}>
-        <div>
+      <div className="patterns-banner" style={{ borderRadius: 24, background: 'linear-gradient(135deg, oklch(78% 0.12 290), oklch(78% 0.15 355))', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 20 }}>
+        <div style={{ minWidth: 0 }}>
           <div style={{ fontFamily: "'Pacifico',cursive", fontSize: 28, color: 'white', marginBottom: 8 }}>Download patterns instantly</div>
           <div style={{ fontSize: 15, color: 'rgba(255,255,255,0.85)', fontWeight: 500 }}>PDF patterns delivered to your inbox — start crocheting today!</div>
         </div>
-        <button className="btn-primary" style={{ background: 'white', color: 'oklch(78% 0.12 290)', flexShrink: 0 }} onClick={() => setPage('shop')}>Browse Patterns</button>
+        <button className="btn-primary patterns-banner-btn" style={{ background: 'white', color: 'oklch(78% 0.12 290)' }} onClick={() => setPage('shop')}>Browse Patterns</button>
       </div>
-      <div style={{ height: 80 }} />
+      </div>{/* end page-wrap */}
     </div>);
 
 }
@@ -687,7 +754,13 @@ function ContactPage() {
   const [topic, setTopic] = useState('custom');
   const [sent, setSent] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', message: '' });
-  const handle = (e) => {e.preventDefault();setSent(true);};
+  const handle = (e) => {
+    e.preventDefault();
+    const subject = encodeURIComponent(topic === 'custom' ? 'Custom order inquiry' : 'Order question');
+    const body = encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`);
+    window.location.href = `mailto:contact@quilliecrochets.com.au?subject=${subject}&body=${body}`;
+    setSent(true);
+  };
   if (sent) return (
     <div className="contact-page"><div className="success-page">
       <span className="success-emoji">💌</span>
@@ -757,6 +830,7 @@ function App() {
   const [inquire, setInquire] = useState(undefined); // undefined = closed, null = general, obj = product
   const [tweaksVisible, setTweaksVisible] = useState(false);
   const [tweaks, setTweaks] = useState(TWEAK_DEFAULTS);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {localStorage.setItem('qc-page', page);}, [page]);
   useEffect(() => {
@@ -767,24 +841,37 @@ function App() {
     window.parent.postMessage({ type: '__edit_mode_available' }, '*');
   }, []);
 
-  const navTo = (p) => {setPage(p);window.scrollTo(0, 0);};
+  const navTo = (p) => {setPage(p); setMenuOpen(false); window.scrollTo(0, 0);};
   const updateTweak = (k, v) => {
     const next = { ...tweaks, [k]: v };
     setTweaks(next);
     window.parent.postMessage({ type: '__edit_mode_set_keys', edits: next }, '*');
   };
 
+  const NAV_ITEMS = [['home', 'Home'], ['shop', 'Shop'], ['gallery', 'Gallery'], ['about', 'About'], ['contact', 'Contact']];
+
   return (
     <>
       <nav className="nav">
         <div className="nav-logo" onClick={() => navTo('home')}>Quillie Crochets</div>
         <div className="nav-links">
-          {[['home', 'Home'], ['shop', 'Shop'], ['gallery', 'Gallery'], ['about', 'About'], ['contact', 'Contact']].map(([p, l]) =>
+          {NAV_ITEMS.map(([p, l]) =>
           <button key={p} className={`nav-link ${page === p ? 'active' : ''}`} onClick={() => navTo(p)}>{l}</button>
           )}
         </div>
         <button className="nav-cta" onClick={() => setInquire(null)}>Custom order ✿</button>
+        <button className={`nav-hamburger ${menuOpen ? 'open' : ''}`} onClick={() => setMenuOpen(o => !o)} aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
       </nav>
+
+      {/* MOBILE MENU */}
+      <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
+        {NAV_ITEMS.map(([p, l]) =>
+          <button key={p} className={`nav-link ${page === p ? 'active' : ''}`} onClick={() => navTo(p)}>{l}</button>
+        )}
+        <button className="mobile-menu-cta" onClick={() => { setInquire(null); setMenuOpen(false); }}>Custom order ✿</button>
+      </div>
 
       {page === 'home' && <HomePage setPage={navTo} setInquire={setInquire} tweaks={tweaks} />}
       {page === 'shop' && <ShopPage setInquire={setInquire} />}
@@ -823,7 +910,7 @@ function App() {
           <h3>What we collect</h3><p>Name, email, and message contents when you contact us — used only to respond to your inquiry.</p>
           <h3>How we use it</h3><p>Your data is never sold. We only use your email to reply to you.</p>
           <h3>Cookies</h3><p>We only store your current page in localStorage to remember where you were. No tracking cookies.</p>
-          <h3>Your rights</h3><p>You can request deletion of any personal data by emailing hello@quilliecrochets.com.</p>
+          <h3>Your rights</h3><p>You can request deletion of any personal data by emailing contact@quilliecrochets.com.au.</p>
         </Modal>
       }
       {legal === 'terms' &&
@@ -831,7 +918,7 @@ function App() {
           <h3>Handmade items</h3><p>All physical items are made to order. Minor variation in colour and size is normal and part of the handmade charm.</p>
           <h3>Digital patterns</h3><p>Patterns are for personal use only. Not for resale, redistribution, or commercial production.</p>
           <h3>Custom orders</h3><p>Custom orders require a 50% deposit. Deposits are non-refundable once work has begun.</p>
-          <h3>Contact</h3><p>Questions? Reach us at hello@quilliecrochets.com</p>
+          <h3>Contact</h3><p>Questions? Reach us at contact@quilliecrochets.com.au</p>
         </Modal>
       }
 
